@@ -31,6 +31,7 @@ const Signup = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [dateOfJoining, setDateOfJoining] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   if (isLoading) {
     return (
