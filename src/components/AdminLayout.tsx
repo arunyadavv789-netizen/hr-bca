@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Loader2 } from "lucide-react";
 
 const AdminLayout = () => {
-  const { session, isLoading } = useAuth();
+  const { session, isLoading, isProfileComplete } = useAuth();
 
   if (isLoading) {
     return (
@@ -16,6 +16,7 @@ const AdminLayout = () => {
   }
 
   if (!session) return <Navigate to="/login" replace />;
+  if (!isProfileComplete) return <Navigate to="/complete-profile" replace />;
 
   return (
     <SidebarProvider>

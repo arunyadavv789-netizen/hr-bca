@@ -11,6 +11,7 @@ interface AuthContextType {
   profile: Tables<"profiles"> | null;
   roles: AppRole[];
   isHR: boolean;
+  isProfileComplete: boolean;
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -84,9 +85,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const isHR = roles.includes("hr_manager") || roles.includes("hr");
+  const isProfileComplete = !!(profile?.full_name && profile?.department && profile?.job_title && profile?.date_of_joining);
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, roles, isHR, isLoading, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ session, user, profile, roles, isHR, isProfileComplete, isLoading, signInWithEmail, signOut }}>
       {children}
     </AuthContext.Provider>
   );
