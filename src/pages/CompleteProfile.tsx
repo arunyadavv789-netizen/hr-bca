@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR"];
 
 const CompleteProfile = () => {
-  const { session, user, profile, isLoading } = useAuth();
+  const { session, user, profile, isLoading, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState(profile?.full_name || "");
@@ -60,8 +60,8 @@ const CompleteProfile = () => {
       if (error) throw error;
 
       toast.success("Profile completed!");
-      // Force reload to refresh auth context
-      window.location.href = "/dashboard";
+      await refreshProfile();
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
       toast.error(err.message || "Failed to save profile");
     } finally {
