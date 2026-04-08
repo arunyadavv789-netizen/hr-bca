@@ -37,7 +37,7 @@ export function AppSidebar() {
         <img src="/logo.png" alt="Bosscoder" className="h-8 w-8 object-contain flex-shrink-0" />
         {!collapsed && (
           <span className="text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-            BossCoderHR
+            BosscoderHR
           </span>
         )}
       </div>
