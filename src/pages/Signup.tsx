@@ -10,16 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Mail, Lock, User, Briefcase, Calendar, Loader2, Eye, EyeOff } from "lucide-react";
 
-const DEPARTMENTS = [
-  "Tech",
-  "Product",
-  "Operations",
-  "Sales",
-  "Placement",
-  "Marketing",
-  "Design",
-  "HR",
-];
+const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR"];
 
 const Signup = () => {
   const { session, isLoading } = useAuth();
@@ -106,7 +97,7 @@ const Signup = () => {
         <div className="flex flex-col items-center gap-3">
           <img src="/logo.png" alt="Bosscoder Academy" className="h-14 object-contain" />
           <div>
-            <h1 className="text-2xl font-bold text-center text-secondary">BosscoderHR</h1>
+            <h1 className="text-2xl font-bold text-center text-secondary">Bosscoder HR</h1>
             <p className="text-sm text-muted-foreground text-center mt-1">Create your account</p>
           </div>
         </div>

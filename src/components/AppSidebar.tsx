@@ -27,18 +27,14 @@ export function AppSidebar() {
   const location = useLocation();
   const { signOut, profile, isHR } = useAuth();
 
-  const items = isHR ? adminItems : [
-    { title: "My Forms", url: "/dashboard", icon: FileText },
-  ];
+  const items = isHR ? adminItems : [{ title: "My Forms", url: "/dashboard", icon: FileText }];
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <div className="p-4 flex items-center gap-3">
         <img src="/logo.png" alt="Bosscoder" className="h-8 w-8 object-contain flex-shrink-0" />
         {!collapsed && (
-          <span className="text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-            BosscoderHR
-          </span>
+          <span className="text-lg font-bold text-sidebar-primary-foreground tracking-tight">Bosscoder HR</span>
         )}
       </div>
 
