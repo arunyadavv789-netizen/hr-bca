@@ -14,16 +14,255 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      form_questions: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          options: Json | null
+          question_text: string
+          question_type: Database["public"]["Enums"]["question_type"]
+          required: boolean
+          section_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          options?: Json | null
+          question_text: string
+          question_type?: Database["public"]["Enums"]["question_type"]
+          required?: boolean
+          section_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          options?: Json | null
+          question_text?: string
+          question_type?: Database["public"]["Enums"]["question_type"]
+          required?: boolean
+          section_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_questions_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "form_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_responses: {
+        Row: {
+          form_id: string
+          id: string
+          submitted_at: string
+          user_id: string
+        }
+        Insert: {
+          form_id: string
+          id?: string
+          submitted_at?: string
+          user_id: string
+        }
+        Update: {
+          form_id?: string
+          id?: string
+          submitted_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_responses_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "forms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_sections: {
+        Row: {
+          created_at: string
+          display_order: number
+          form_id: string
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          form_id: string
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          form_id?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_sections_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "forms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forms: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          note: string | null
+          status: Database["public"]["Enums"]["form_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          note?: string | null
+          status?: Database["public"]["Enums"]["form_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          note?: string | null
+          status?: Database["public"]["Enums"]["form_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          date_of_joining: string | null
+          department: string | null
+          email: string
+          full_name: string
+          id: string
+          job_title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_of_joining?: string | null
+          department?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          job_title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_of_joining?: string | null
+          department?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          job_title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      response_answers: {
+        Row: {
+          answer_text: string | null
+          created_at: string
+          id: string
+          question_id: string
+          rating_value: number | null
+          response_id: string
+        }
+        Insert: {
+          answer_text?: string | null
+          created_at?: string
+          id?: string
+          question_id: string
+          rating_value?: number | null
+          response_id: string
+        }
+        Update: {
+          answer_text?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string
+          rating_value?: number | null
+          response_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "response_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "form_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "response_answers_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "form_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_hr: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "hr_manager" | "hr" | "employee"
+      form_status: "draft" | "published" | "closed"
+      question_type: "text" | "textarea" | "dropdown" | "rating"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +389,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["hr_manager", "hr", "employee"],
+      form_status: ["draft", "published", "closed"],
+      question_type: ["text", "textarea", "dropdown", "rating"],
+    },
   },
 } as const
