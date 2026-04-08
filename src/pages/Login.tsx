@@ -69,7 +69,7 @@ const Login = () => {
         <div className="flex flex-col items-center gap-3">
           <img src="/logo.png" alt="Bosscoder Academy" className="h-14 object-contain" />
           <div>
-            <h1 className="text-2xl font-bold text-center text-secondary">BossCoderHR</h1>
+            <h1 className="text-2xl font-bold text-center text-secondary">BosscoderHR</h1>
             <p className="text-sm text-muted-foreground text-center mt-1">Employee Appraisal Platform</p>
           </div>
         </div>
@@ -142,6 +142,10 @@ const Login = () => {
             </form>
 
             <p className="text-xs text-center text-muted-foreground">
+              Don't have an account?{" "}
+              <a href="/signup" className="text-primary font-medium hover:underline">Sign up</a>
+            </p>
+            <p className="text-xs text-center text-muted-foreground mt-2">
               Only <span className="font-medium">@bosscoderacademy.com</span> accounts are allowed
             </p>
           </CardContent>
