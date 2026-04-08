@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Mail, Lock, User, Briefcase, Calendar, Loader2 } from "lucide-react";
+import { Mail, Lock, User, Briefcase, Calendar, Loader2, Eye, EyeOff } from "lucide-react";
 
 const DEPARTMENTS = [
   "Tech",
