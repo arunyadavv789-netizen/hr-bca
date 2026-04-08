@@ -276,6 +276,18 @@ const FormFill = () => {
       <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle className="text-lg">{section.title}</CardTitle>
+          {section.questions.some((q) => q.question_type === "rating") && (
+            <div className="mt-2 rounded-lg bg-accent p-3 text-xs text-accent-foreground space-y-1">
+              <p className="font-medium">Rating Scale (1–5):</p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                <span>1 = Outstanding</span>
+                <span>4 = Below Average</span>
+                <span>2 = Good</span>
+                <span>5 = Poor</span>
+                <span>3 = Average</span>
+              </div>
+            </div>
+          )}
         </CardHeader>
         <CardContent className="space-y-6">
           {section.questions.map((q) => (
