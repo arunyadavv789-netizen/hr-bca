@@ -15,6 +15,7 @@ interface AuthContextType {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,11 +85,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setRoles([]);
   };
 
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchUserData(user.id);
+    }
+  };
+
   const isHR = roles.includes("hr_manager") || roles.includes("hr");
   const isProfileComplete = !!(profile?.full_name && profile?.department && profile?.job_title && profile?.date_of_joining);
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, roles, isHR, isProfileComplete, isLoading, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ session, user, profile, roles, isHR, isProfileComplete, isLoading, signInWithEmail, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
