@@ -42,26 +42,31 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-      extraParams: {
-        hd: "bosscoderacademy.com",
-        prompt: "select_account",
-      },
-    });
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+        extraParams: {
+          hd: "bosscoderacademy.com",
+          prompt: "select_account",
+        },
+      });
 
-    if (result.error) {
-      toast.error("Google sign-in failed");
+      if (result.error) {
+        toast.error("Google sign-in failed: " + (result.error.message || "Unknown error"));
+        setLoading(false);
+        return;
+      }
+
+      if (result.redirected) {
+        return;
+      }
+
+      // Session set successfully — redirect will happen via session check above
+    } catch (err: any) {
+      toast.error("Google sign-in failed: " + (err.message || "Unknown error"));
+    } finally {
       setLoading(false);
-      return;
     }
-
-    if (result.redirected) {
-      return;
-    }
-
-    // Session set successfully, navigate
-    setLoading(false);
   };
 
   return (
