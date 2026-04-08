@@ -20,20 +20,37 @@ interface FormSection {
   questions: Tables<"form_questions">[];
 }
 
+const RATING_LABELS: Record<number, string> = {
+  1: "Outstanding",
+  2: "Good",
+  3: "Average",
+  4: "Below Average",
+  5: "Poor",
+};
+
 const StarRating = ({ value, onChange }: { value: number; onChange: (v: number) => void }) => (
-  <div className="flex gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <button
-        key={star}
-        type="button"
-        onClick={() => onChange(star)}
-        className="p-0.5 transition-colors"
-      >
-        <Star
-          className={`h-7 w-7 ${star <= value ? "fill-primary text-primary" : "text-muted-foreground/30"}`}
-        />
-      </button>
-    ))}
+  <div className="space-y-2">
+    <div className="flex gap-2">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          onClick={() => onChange(star)}
+          className={`px-3 py-1.5 rounded-md text-sm font-medium border transition-colors ${
+            star === value
+              ? "bg-primary text-primary-foreground border-primary"
+              : "bg-background text-muted-foreground border-input hover:border-primary/50"
+          }`}
+        >
+          {star}
+        </button>
+      ))}
+    </div>
+    {value > 0 && (
+      <p className="text-xs text-muted-foreground">
+        {value} = {RATING_LABELS[value]}
+      </p>
+    )}
   </div>
 );
 
