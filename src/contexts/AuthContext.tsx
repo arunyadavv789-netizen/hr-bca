@@ -25,37 +25,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const clearUserData = () => {
+    setProfile(null);
+    setRoles([]);
+  };
+
   const fetchUserData = async (userId: string) => {
     const [profileRes, rolesRes] = await Promise.all([
-      supabase.from("profiles").select("*").eq("user_id", userId).single(),
+      supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
       supabase.from("user_roles").select("role").eq("user_id", userId),
     ]);
-    if (profileRes.data) setProfile(profileRes.data);
-    if (rolesRes.data) setRoles(rolesRes.data.map((r) => r.role));
+
+    setProfile(profileRes.data ?? null);
+    setRoles((rolesRes.data ?? []).map((r) => r.role));
+  };
+
+  const syncAuthState = (nextSession: Session | null) => {
+    setSession(nextSession);
+    setUser(nextSession?.user ?? null);
+
+    if (!nextSession?.user) {
+      clearUserData();
+      setIsLoading(false);
+      return;
+    }
+
+    clearUserData();
+    setTimeout(() => {
+      fetchUserData(nextSession.user.id).finally(() => {
+        setIsLoading(false);
+      });
+    }, 0);
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          setTimeout(() => fetchUserData(session.user.id), 0);
-        } else {
-          setProfile(null);
-          setRoles([]);
-        }
-        setIsLoading(false);
-      }
-    );
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      syncAuthState(nextSession);
+    });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserData(session.user.id);
-      }
-      setIsLoading(false);
+      syncAuthState(session);
     });
 
     return () => subscription.unsubscribe();
