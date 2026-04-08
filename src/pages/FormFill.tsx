@@ -83,6 +83,15 @@ const FormFill = () => {
     }
     setForm(formData);
 
+    // Check eligibility: must have joined on or before 30 Sep 2025
+    const cutoffDate = new Date("2025-09-30");
+    const doj = profile?.date_of_joining ? new Date(profile.date_of_joining) : null;
+    if (!doj || doj > cutoffDate) {
+      setNotEligible(true);
+      setLoading(false);
+      return;
+    }
+
     // Check if already submitted
     const { data: existing } = await supabase
       .from("form_responses")
