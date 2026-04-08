@@ -60,11 +60,13 @@ const CompleteProfile = () => {
       if (error) throw error;
 
       toast.success("Profile completed!");
+      // Wait for profile refresh then navigate after a tick so React state settles
       await refreshProfile();
-      navigate("/dashboard", { replace: true });
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 100);
     } catch (err: any) {
       toast.error(err.message || "Failed to save profile");
-    } finally {
       setSaving(false);
     }
   };
