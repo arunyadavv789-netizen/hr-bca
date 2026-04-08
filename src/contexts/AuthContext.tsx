@@ -38,8 +38,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       supabase.from("user_roles").select("role").eq("user_id", userId),
     ]);
 
-    setProfile(profileRes.data ?? null);
+    const fetchedProfile = profileRes.data ?? null;
+    setProfile(fetchedProfile);
     setRoles((rolesRes.data ?? []).map((r) => r.role));
+    return fetchedProfile;
   };
 
   const syncAuthState = (nextSession: Session | null) => {
