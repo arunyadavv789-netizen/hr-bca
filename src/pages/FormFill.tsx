@@ -199,6 +199,30 @@ const FormFill = () => {
 
   if (!session) return <Navigate to="/login" replace />;
 
+  if (notEligible) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <Card className="border-0 shadow-lg max-w-md w-full">
+          <CardContent className="py-12 text-center space-y-4">
+            <div className="h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+              <span className="text-2xl">🚫</span>
+            </div>
+            <h2 className="text-xl font-bold text-foreground">Not Eligible</h2>
+            <p className="text-muted-foreground">
+              You are not eligible to fill this appraisal form. Only employees who joined on or before <strong>30 September 2025</strong> can participate.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Your date of joining: <strong>{profile?.date_of_joining || "Not set"}</strong>
+            </p>
+            <Button onClick={() => navigate("/dashboard")} className="gradient-primary">
+              Go to Dashboard
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (alreadySubmitted || submitted) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
