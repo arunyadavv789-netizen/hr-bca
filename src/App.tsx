@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import CompleteProfile from "./pages/CompleteProfile";
 import Dashboard from "./pages/Dashboard";
 import FormsList from "./pages/FormsList";
 import FormBuilder from "./pages/FormBuilder";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
             <Route path="/form/:id" element={<AdminLayout />}>
               <Route index element={<FormFill />} />
             </Route>

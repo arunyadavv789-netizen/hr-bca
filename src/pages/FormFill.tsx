@@ -244,21 +244,17 @@ const FormFill = () => {
               <span className="font-medium">{profile?.full_name || "—"}</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Email:</span>{" "}
-              <span className="font-medium">{profile?.email || user?.email}</span>
+              <span className="text-muted-foreground">Department:</span>{" "}
+              <span className="font-medium">{profile?.department || "—"}</span>
             </div>
-            {profile?.department && (
-              <div>
-                <span className="text-muted-foreground">Department:</span>{" "}
-                <span className="font-medium">{profile.department}</span>
-              </div>
-            )}
-            {profile?.job_title && (
-              <div>
-                <span className="text-muted-foreground">Job Title:</span>{" "}
-                <span className="font-medium">{profile.job_title}</span>
-              </div>
-            )}
+            <div>
+              <span className="text-muted-foreground">Job Title:</span>{" "}
+              <span className="font-medium">{profile?.job_title || "—"}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Date of Joining:</span>{" "}
+              <span className="font-medium">{profile?.date_of_joining || "—"}</span>
+            </div>
           </div>
         </CardContent>
       </Card>
