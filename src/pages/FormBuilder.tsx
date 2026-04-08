@@ -56,11 +56,7 @@ const FormBuilder = () => {
     setNote(form.note ?? "");
     setStatus(form.status as "draft" | "published");
 
-    const { data: secs } = await supabase
-      .from("form_sections")
-      .select("*")
-      .eq("form_id", id!)
-      .order("display_order");
+    const { data: secs } = await supabase.from("form_sections").select("*").eq("form_id", id!).order("display_order");
 
     if (secs) {
       const sectionsWithQuestions: Section[] = [];
@@ -89,10 +85,7 @@ const FormBuilder = () => {
   };
 
   const addSection = () => {
-    setSections([
-      ...sections,
-      { title: "", display_order: sections.length, questions: [] },
-    ]);
+    setSections([...sections, { title: "", display_order: sections.length, questions: [] }]);
   };
 
   const removeSection = (idx: number) => {
@@ -170,7 +163,7 @@ const FormBuilder = () => {
               options: q.options,
               required: q.required,
               display_order: qi,
-            }))
+            })),
           );
         }
       }
@@ -198,9 +191,7 @@ const FormBuilder = () => {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-foreground">
-            {isEdit ? "Edit Form" : "Create Form"}
-          </h1>
+          <h1 className="text-2xl font-bold text-foreground">{isEdit ? "Edit Form" : "Create Form"}</h1>
         </div>
         <div className="flex gap-2">
           {isEdit && status === "published" && (
@@ -226,11 +217,21 @@ const FormBuilder = () => {
           </div>
           <div className="space-y-2">
             <Label>Description</Label>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description of this form" rows={2} />
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of this form"
+              rows={2}
+            />
           </div>
           <div className="space-y-2">
             <Label>Note for employees</Label>
-            <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. This form is only eligible for employees who have completed 3 months" rows={2} />
+            <Textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="e.g. This form is only eligible for employees who have completed 6 months (who have joined in or before September 2025)"
+              rows={2}
+            />
           </div>
         </CardContent>
       </Card>
@@ -262,10 +263,7 @@ const FormBuilder = () => {
                     placeholder="Question text"
                   />
                   <div className="flex gap-4 items-center flex-wrap">
-                    <Select
-                      value={q.question_type}
-                      onValueChange={(v) => updateQuestion(si, qi, "question_type", v)}
-                    >
+                    <Select value={q.question_type} onValueChange={(v) => updateQuestion(si, qi, "question_type", v)}>
                       <SelectTrigger className="w-40">
                         <SelectValue />
                       </SelectTrigger>
@@ -278,10 +276,7 @@ const FormBuilder = () => {
                     </Select>
 
                     <div className="flex items-center gap-2">
-                      <Checkbox
-                        checked={q.required}
-                        onCheckedChange={(c) => updateQuestion(si, qi, "required", !!c)}
-                      />
+                      <Checkbox checked={q.required} onCheckedChange={(c) => updateQuestion(si, qi, "required", !!c)} />
                       <span className="text-sm text-muted-foreground">Required</span>
                     </div>
                   </div>
@@ -292,7 +287,15 @@ const FormBuilder = () => {
                       <Input
                         value={q.options.join(", ")}
                         onChange={(e) =>
-                          updateQuestion(si, qi, "options", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))
+                          updateQuestion(
+                            si,
+                            qi,
+                            "options",
+                            e.target.value
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
+                          )
                         }
                         placeholder="Option 1, Option 2, Option 3"
                       />
