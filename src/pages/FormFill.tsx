@@ -67,6 +67,7 @@ const FormFill = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
+  const [notEligible, setNotEligible] = useState(false);
 
   useEffect(() => {
     if (!user || !id) return;
