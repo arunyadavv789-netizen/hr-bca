@@ -54,6 +54,9 @@ const StarRating = ({ value, onChange }: { value: number; onChange: (v: number) 
   </div>
 );
 
+const getStorageKey = (formId: string, userId: string) => `formfill_${formId}_${userId}`;
+const getSectionKey = (formId: string, userId: string) => `formfill_section_${formId}_${userId}`;
+
 const FormFill = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -67,10 +70,26 @@ const FormFill = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
-  
+  const [formLoaded, setFormLoaded] = useState(false);
+
+  // Persist answers to localStorage whenever they change
+  useEffect(() => {
+    if (!id || !user || !formLoaded || Object.keys(answers).length === 0) return;
+    try {
+      localStorage.setItem(getStorageKey(id, user.id), JSON.stringify(answers));
+    } catch {}
+  }, [answers, id, user, formLoaded]);
+
+  // Persist current section to localStorage
+  useEffect(() => {
+    if (!id || !user || !formLoaded) return;
+    try {
+      localStorage.setItem(getSectionKey(id, user.id), String(currentSection));
+    } catch {}
+  }, [currentSection, id, user, formLoaded]);
 
   useEffect(() => {
-    if (!user || !id) return;
+    if (!user || !id || formLoaded) return;
     loadForm();
   }, [user, id]);
 
@@ -83,7 +102,6 @@ const FormFill = () => {
     }
     setForm(formData);
 
-
     // Check if already submitted
     const { data: existing } = await supabase
       .from("form_responses")
@@ -94,6 +112,7 @@ const FormFill = () => {
     if (existing) {
       setAlreadySubmitted(true);
       setLoading(false);
+      setFormLoaded(true);
       return;
     }
 
@@ -116,16 +135,32 @@ const FormFill = () => {
       }
       setSections(loadedSections);
 
-      // Init answers
+      // Restore answers from localStorage or init empty
+      let restoredAnswers: Record<string, { text: string; rating: number | null }> | null = null;
+      try {
+        const saved = localStorage.getItem(getStorageKey(id!, user!.id));
+        if (saved) restoredAnswers = JSON.parse(saved);
+      } catch {}
+
       const initAnswers: Record<string, { text: string; rating: number | null }> = {};
       loadedSections.forEach((s) =>
         s.questions.forEach((q) => {
-          initAnswers[q.id] = { text: "", rating: null };
+          initAnswers[q.id] = restoredAnswers?.[q.id] ?? { text: "", rating: null };
         })
       );
       setAnswers(initAnswers);
+
+      // Restore current section
+      try {
+        const savedSection = localStorage.getItem(getSectionKey(id!, user!.id));
+        if (savedSection) {
+          const idx = parseInt(savedSection, 10);
+          if (idx >= 0 && idx < loadedSections.length) setCurrentSection(idx);
+        }
+      } catch {}
     }
     setLoading(false);
+    setFormLoaded(true);
   };
 
   const updateAnswer = (qId: string, field: "text" | "rating", val: any) => {
@@ -171,6 +206,12 @@ const FormFill = () => {
 
       const { error: ansError } = await supabase.from("response_answers").insert(answerRows);
       if (ansError) throw ansError;
+
+      // Clear saved draft
+      try {
+        localStorage.removeItem(getStorageKey(id!, user!.id));
+        localStorage.removeItem(getSectionKey(id!, user!.id));
+      } catch {}
 
       setSubmitted(true);
       toast.success("Form submitted successfully!");
