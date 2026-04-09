@@ -207,6 +207,12 @@ const FormFill = () => {
       const { error: ansError } = await supabase.from("response_answers").insert(answerRows);
       if (ansError) throw ansError;
 
+      // Clear saved draft
+      try {
+        localStorage.removeItem(getStorageKey(id!, user!.id));
+        localStorage.removeItem(getSectionKey(id!, user!.id));
+      } catch {}
+
       setSubmitted(true);
       toast.success("Form submitted successfully!");
     } catch (e: any) {
