@@ -46,17 +46,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const syncAuthState = (nextSession: Session | null) => {
     setSession(nextSession);
-    setUser(nextSession?.user ?? null);
+    const nextUser = nextSession?.user ?? null;
 
-    if (!nextSession?.user) {
+    if (!nextUser) {
+      setUser(null);
       clearUserData();
       setIsLoading(false);
       return;
     }
 
-    clearUserData();
+    // If same user, keep existing profile/roles — don't reset state
+    if (user?.id === nextUser.id && profile) {
+      setUser(nextUser);
+      setIsLoading(false);
+      return;
+    }
+
+    setUser(nextUser);
     setTimeout(() => {
-      fetchUserData(nextSession.user.id).finally(() => {
+      fetchUserData(nextUser.id).finally(() => {
         setIsLoading(false);
       });
     }, 0);
