@@ -72,6 +72,7 @@ const FormFill = () => {
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
   const [formLoaded, setFormLoaded] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Persist answers to localStorage whenever they change
   useEffect(() => {
