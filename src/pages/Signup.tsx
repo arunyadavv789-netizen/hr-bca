@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Mail, Lock, User, Briefcase, Calendar, Loader2, Eye, EyeOff } from "lucide-react";
 
-const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR"];
+const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR & Finance"];
 
 const Signup = () => {
   const { session, isLoading } = useAuth();
