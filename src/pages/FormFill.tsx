@@ -172,8 +172,7 @@ const FormFill = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    // Validate required
+  const validateAndConfirm = () => {
     for (const sec of sections) {
       for (const q of sec.questions) {
         if (q.required) {
@@ -189,7 +188,11 @@ const FormFill = () => {
         }
       }
     }
+    setShowConfirm(true);
+  };
 
+  const handleSubmit = async () => {
+    setShowConfirm(false);
     setSubmitting(true);
     try {
       const { data: response, error } = await supabase
@@ -209,7 +212,6 @@ const FormFill = () => {
       const { error: ansError } = await supabase.from("response_answers").insert(answerRows);
       if (ansError) throw ansError;
 
-      // Clear saved draft
       try {
         localStorage.removeItem(getStorageKey(id!, user!.id));
         localStorage.removeItem(getSectionKey(id!, user!.id));
