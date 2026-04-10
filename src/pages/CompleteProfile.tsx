@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR"];
+const DEPARTMENTS = ["Tech", "Product", "Operations", "Sales", "Placement", "Marketing", "Design", "HR & Finance"];
 
 const CompleteProfile = () => {
   const { session, user, profile, isLoading, refreshProfile } = useAuth();
@@ -78,9 +78,7 @@ const CompleteProfile = () => {
           <img src="/logo.png" alt="Bosscoder Academy" className="h-14 object-contain" />
           <div>
             <h1 className="text-2xl font-bold text-center text-secondary">Complete Your Profile</h1>
-            <p className="text-sm text-muted-foreground text-center mt-1">
-              Please fill in your details to continue
-            </p>
+            <p className="text-sm text-muted-foreground text-center mt-1">Please fill in your details to continue</p>
           </div>
         </div>
 
@@ -93,7 +91,9 @@ const CompleteProfile = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name <span className="text-destructive">*</span></Label>
+                <Label htmlFor="fullName">
+                  Full Name <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="fullName"
                   value={fullName}
@@ -104,21 +104,27 @@ const CompleteProfile = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="department">Department <span className="text-destructive">*</span></Label>
+                <Label htmlFor="department">
+                  Department <span className="text-destructive">*</span>
+                </Label>
                 <Select value={department} onValueChange={setDepartment} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent>
                     {DEPARTMENTS.map((dept) => (
-                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="jobTitle">Job Title <span className="text-destructive">*</span></Label>
+                <Label htmlFor="jobTitle">
+                  Job Title <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="jobTitle"
                   value={jobTitle}
@@ -129,7 +135,9 @@ const CompleteProfile = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="doj">Date of Joining <span className="text-destructive">*</span></Label>
+                <Label htmlFor="doj">
+                  Date of Joining <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="doj"
                   type="date"
