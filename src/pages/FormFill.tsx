@@ -9,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 interface FormSection {
@@ -71,6 +72,7 @@ const FormFill = () => {
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
   const [formLoaded, setFormLoaded] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Persist answers to localStorage whenever they change
   useEffect(() => {
@@ -170,8 +172,7 @@ const FormFill = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    // Validate required
+  const validateAndConfirm = () => {
     for (const sec of sections) {
       for (const q of sec.questions) {
         if (q.required) {
@@ -187,7 +188,11 @@ const FormFill = () => {
         }
       }
     }
+    setShowConfirm(true);
+  };
 
+  const handleSubmit = async () => {
+    setShowConfirm(false);
     setSubmitting(true);
     try {
       const { data: response, error } = await supabase
@@ -207,7 +212,6 @@ const FormFill = () => {
       const { error: ansError } = await supabase.from("response_answers").insert(answerRows);
       if (ansError) throw ansError;
 
-      // Clear saved draft
       try {
         localStorage.removeItem(getStorageKey(id!, user!.id));
         localStorage.removeItem(getSectionKey(id!, user!.id));
@@ -397,12 +401,35 @@ const FormFill = () => {
             Next
           </Button>
         ) : (
-          <Button onClick={handleSubmit} disabled={submitting} className="gradient-primary">
+          <Button onClick={validateAndConfirm} disabled={submitting} className="gradient-primary">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
             Submit
           </Button>
         )}
       </div>
+
+      {/* Confirm Submit Dialog */}
+      <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                <AlertTriangle className="h-5 w-5 text-amber-600" />
+              </div>
+              <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-sm leading-relaxed">
+              Please check your responses carefully before submitting. <strong>You won't be able to edit anything afterwards.</strong>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Go Back & Review</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSubmit} className="gradient-primary">
+              Yes, Submit
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
