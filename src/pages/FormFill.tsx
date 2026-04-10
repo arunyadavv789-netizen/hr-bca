@@ -401,12 +401,35 @@ const FormFill = () => {
             Next
           </Button>
         ) : (
-          <Button onClick={handleSubmit} disabled={submitting} className="gradient-primary">
+          <Button onClick={validateAndConfirm} disabled={submitting} className="gradient-primary">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
             Submit
           </Button>
         )}
       </div>
+
+      {/* Confirm Submit Dialog */}
+      <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                <AlertTriangle className="h-5 w-5 text-amber-600" />
+              </div>
+              <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-sm leading-relaxed">
+              Please check your responses carefully before submitting. <strong>You won't be able to edit anything afterwards.</strong>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Go Back & Review</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSubmit} className="gradient-primary">
+              Yes, Submit
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
