@@ -16,7 +16,7 @@ const AdminLayout = () => {
   }
 
   if (!session) return <Navigate to="/login" replace />;
-  if (!isProfileComplete) return <Navigate to="/complete-profile" replace />;
+  if (!isHR && !isProfileComplete) return <Navigate to="/complete-profile" replace />;
 
   return (
     <SidebarProvider>
