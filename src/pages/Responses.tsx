@@ -186,7 +186,7 @@ const Responses = () => {
                             ))}
                           </div>
                         ) : (
-                          <p className="text-sm text-muted-foreground">{a.answer_text || "—"}</p>
+                          <p className="text-sm text-muted-foreground whitespace-pre-wrap">{a.answer_text || "—"}</p>
                         )}
                       </div>
                     ))}
