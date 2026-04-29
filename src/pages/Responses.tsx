@@ -28,6 +28,8 @@ interface AnswerDetail {
   question_text: string;
   question_type: string;
   section_title: string;
+  section_order: number;
+  question_order: number;
   answer_text: string | null;
   rating_value: number | null;
 }
@@ -87,10 +89,16 @@ const Responses = () => {
         question_text: a.form_questions.question_text,
         question_type: a.form_questions.question_type,
         section_title: a.form_questions.form_sections.title,
+        section_order: a.form_questions.form_sections.display_order ?? 0,
+        question_order: a.form_questions.display_order ?? 0,
         answer_text: a.answer_text,
         rating_value: a.rating_value,
       }));
-      // Sort by section then question order
+      details.sort(
+        (x, y) =>
+          x.section_order - y.section_order ||
+          x.question_order - y.question_order
+      );
       setAnswerDetails(details);
     }
     setDialogOpen(true);
