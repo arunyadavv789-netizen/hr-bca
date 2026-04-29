@@ -8,6 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { Star, User, ArrowLeft, BarChart3 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
+const RATING_LABELS: Record<number, string> = {
+  1: "Outstanding",
+  2: "Good",
+  3: "Average",
+  4: "Below Average",
+  5: "Poor",
+};
+
 interface ResponseWithProfile {
   id: string;
   form_id: string;
@@ -177,13 +185,22 @@ const Responses = () => {
                       <div key={idx} className="bg-muted/50 rounded-lg p-4">
                         <p className="text-sm font-medium text-foreground mb-1">{a.question_text}</p>
                         {a.question_type === "rating" ? (
-                          <div className="flex gap-0.5">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star
-                                key={s}
-                                className={`h-5 w-5 ${s <= (a.rating_value ?? 0) ? "fill-primary text-primary" : "text-muted-foreground/30"}`}
-                              />
-                            ))}
+                          <div className="flex items-center gap-3 mt-1">
+                            <div className="flex gap-0.5">
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <Star
+                                  key={s}
+                                  className={`h-5 w-5 ${s <= (a.rating_value ?? 0) ? "fill-primary text-primary" : "text-muted-foreground/30"}`}
+                                />
+                              ))}
+                            </div>
+                            {a.rating_value ? (
+                              <Badge variant="secondary" className="text-xs font-medium">
+                                {a.rating_value} = {RATING_LABELS[a.rating_value]}
+                              </Badge>
+                            ) : (
+                              <span className="text-xs text-muted-foreground">Not rated</span>
+                            )}
                           </div>
                         ) : (
                           <p className="text-sm text-muted-foreground whitespace-pre-wrap">{a.answer_text || "—"}</p>
