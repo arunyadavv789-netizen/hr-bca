@@ -176,23 +176,31 @@ const Responses = () => {
             <p className="text-sm text-muted-foreground pl-11">{selectedResponse?.profile?.email}</p>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-6 py-4">
-            <div className="space-y-6">
+          <div className="flex-1 overflow-y-auto px-6 py-6 bg-muted/30">
+            <div className="space-y-8">
               {(() => {
                 const grouped: Record<string, AnswerDetail[]> = {};
                 answerDetails.forEach((a) => {
                   if (!grouped[a.section_title]) grouped[a.section_title] = [];
                   grouped[a.section_title].push(a);
                 });
-                return Object.entries(grouped).map(([section, answers]) => (
-                  <div key={section}>
-                    <h3 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                      {section}
-                    </h3>
-                    <div className="space-y-3">
+                return Object.entries(grouped).map(([section, answers], sIdx) => (
+                  <section
+                    key={section}
+                    className="bg-background rounded-xl border border-border shadow-sm overflow-hidden"
+                  >
+                    <header className="flex items-center gap-3 px-5 py-3 bg-secondary border-b border-border">
+                      <div className="h-7 w-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shrink-0">
+                        {sIdx + 1}
+                      </div>
+                      <h3 className="font-semibold text-secondary-foreground text-sm uppercase tracking-wide">
+                        {section}
+                      </h3>
+                    </header>
+                    <div className="divide-y divide-border">
                       {answers.map((a, idx) => (
-                        <div key={idx} className="bg-muted/50 rounded-lg p-4">
-                          <p className="text-sm font-medium text-foreground mb-1">{a.question_text}</p>
+                        <div key={idx} className="px-5 py-4">
+                          <p className="text-sm font-medium text-foreground mb-2">{a.question_text}</p>
                           {a.question_type === "rating" ? (
                             <div className="flex items-center gap-3 mt-1">
                               <div className="flex gap-0.5">
@@ -212,12 +220,12 @@ const Responses = () => {
                               )}
                             </div>
                           ) : (
-                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{a.answer_text || "—"}</p>
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">{a.answer_text || "—"}</p>
                           )}
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </section>
                 ));
               })()}
             </div>
