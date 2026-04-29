@@ -177,7 +177,7 @@ Analyze this honestly and return the structured output.`;
                   items: {
                     type: "object",
                     properties: {
-                      category: { type: "string", enum: ["Evidence Probe", "Self-Rating Challenge", "Over-Achievement Test", "Growth Honesty", "Future Commitment"] },
+                      category: { type: "string", enum: ["Achievement Deep-Dive", "Self-Rating Check", "Ownership & Stretch", "Growth & Support", "Future & Commitment"] },
                       quoted_line: { type: "string", description: "Exact phrase from their answer being referenced" },
                       question: { type: "string", description: "The full probing question to ask" },
                     },
