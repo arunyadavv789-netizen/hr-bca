@@ -165,60 +165,62 @@ const Responses = () => {
 
       {/* Detail Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b bg-background shrink-0">
             <DialogTitle className="flex items-center gap-3">
               <div className="h-8 w-8 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
                 {(selectedResponse?.profile?.full_name || "?").charAt(0).toUpperCase()}
               </div>
               {selectedResponse?.profile?.full_name || "Response Details"}
             </DialogTitle>
-            <p className="text-sm text-muted-foreground">{selectedResponse?.profile?.email}</p>
+            <p className="text-sm text-muted-foreground pl-11">{selectedResponse?.profile?.email}</p>
           </DialogHeader>
 
-          <div className="space-y-6 mt-4">
-            {(() => {
-              const grouped: Record<string, AnswerDetail[]> = {};
-              answerDetails.forEach((a) => {
-                if (!grouped[a.section_title]) grouped[a.section_title] = [];
-                grouped[a.section_title].push(a);
-              });
-              return Object.entries(grouped).map(([section, answers]) => (
-                <div key={section}>
-                  <h3 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                    {section}
-                  </h3>
-                  <div className="space-y-3">
-                    {answers.map((a, idx) => (
-                      <div key={idx} className="bg-muted/50 rounded-lg p-4">
-                        <p className="text-sm font-medium text-foreground mb-1">{a.question_text}</p>
-                        {a.question_type === "rating" ? (
-                          <div className="flex items-center gap-3 mt-1">
-                            <div className="flex gap-0.5">
-                              {[1, 2, 3, 4, 5].map((s) => (
-                                <Star
-                                  key={s}
-                                  className={`h-5 w-5 ${s <= (a.rating_value ?? 0) ? "fill-primary text-primary" : "text-muted-foreground/30"}`}
-                                />
-                              ))}
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="space-y-6">
+              {(() => {
+                const grouped: Record<string, AnswerDetail[]> = {};
+                answerDetails.forEach((a) => {
+                  if (!grouped[a.section_title]) grouped[a.section_title] = [];
+                  grouped[a.section_title].push(a);
+                });
+                return Object.entries(grouped).map(([section, answers]) => (
+                  <div key={section}>
+                    <h3 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wider text-muted-foreground">
+                      {section}
+                    </h3>
+                    <div className="space-y-3">
+                      {answers.map((a, idx) => (
+                        <div key={idx} className="bg-muted/50 rounded-lg p-4">
+                          <p className="text-sm font-medium text-foreground mb-1">{a.question_text}</p>
+                          {a.question_type === "rating" ? (
+                            <div className="flex items-center gap-3 mt-1">
+                              <div className="flex gap-0.5">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                  <Star
+                                    key={s}
+                                    className={`h-5 w-5 ${s <= (a.rating_value ?? 0) ? "fill-primary text-primary" : "text-muted-foreground/30"}`}
+                                  />
+                                ))}
+                              </div>
+                              {a.rating_value ? (
+                                <Badge variant="secondary" className="text-xs font-medium">
+                                  {a.rating_value} = {RATING_LABELS[a.rating_value]}
+                                </Badge>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">Not rated</span>
+                              )}
                             </div>
-                            {a.rating_value ? (
-                              <Badge variant="secondary" className="text-xs font-medium">
-                                {a.rating_value} = {RATING_LABELS[a.rating_value]}
-                              </Badge>
-                            ) : (
-                              <span className="text-xs text-muted-foreground">Not rated</span>
-                            )}
-                          </div>
-                        ) : (
-                          <p className="text-sm text-muted-foreground whitespace-pre-wrap">{a.answer_text || "—"}</p>
-                        )}
-                      </div>
-                    ))}
+                          ) : (
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{a.answer_text || "—"}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ));
-            })()}
+                ));
+              })()}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
