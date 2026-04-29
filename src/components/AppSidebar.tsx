@@ -44,7 +44,7 @@ export function AppSidebar() {
   return (
     <>
       <Sidebar collapsible="icon" className="border-r-0">
-        <div className="p-4 flex items-center gap-3">
+        <div className={`p-4 flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
           <img src="/logo.png" alt="Bosscoder" className="h-8 w-8 object-contain flex-shrink-0" />
           {!collapsed && (
             <span className="text-lg font-bold text-sidebar-primary-foreground tracking-tight">Bosscoder HR</span>
@@ -57,11 +57,11 @@ export function AppSidebar() {
               <SidebarMenu>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip={item.title}>
                       <NavLink
                         to={item.url}
                         end={item.url === "/dashboard"}
-                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className={`flex items-center gap-3 rounded-lg py-2.5 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${collapsed ? "justify-center px-0" : "px-3"}`}
                         activeClassName="bg-sidebar-accent text-sidebar-primary-foreground font-medium"
                       >
                         <item.icon className="h-5 w-5 flex-shrink-0" />
@@ -86,8 +86,10 @@ export function AppSidebar() {
           )}
           <Button
             variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            size={collapsed ? "icon" : "default"}
+            className={`text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${collapsed ? "mx-auto" : "w-full justify-start gap-3"}`}
             onClick={() => setShowLogoutDialog(true)}
+            title="Sign Out"
           >
             <LogOut className="h-5 w-5" />
             {!collapsed && "Sign Out"}
