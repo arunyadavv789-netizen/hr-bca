@@ -185,6 +185,42 @@ export type Database = {
         }
         Relationships: []
       }
+      response_analysis: {
+        Row: {
+          created_at: string
+          id: string
+          overall_score: number
+          parameters: Json
+          questions: Json
+          response_id: string
+          summary: string | null
+          updated_at: string
+          verdict: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          overall_score: number
+          parameters?: Json
+          questions?: Json
+          response_id: string
+          summary?: string | null
+          updated_at?: string
+          verdict: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          overall_score?: number
+          parameters?: Json
+          questions?: Json
+          response_id?: string
+          summary?: string | null
+          updated_at?: string
+          verdict?: string
+        }
+        Relationships: []
+      }
       response_answers: {
         Row: {
           answer_text: string | null
