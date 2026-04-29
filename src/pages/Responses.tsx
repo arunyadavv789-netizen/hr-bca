@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Star, User, ArrowLeft, BarChart3 } from "lucide-react";
+import { Star, User, ArrowLeft, BarChart3, Building2, Briefcase, Calendar } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 const RATING_LABELS: Record<number, string> = {
@@ -142,10 +142,10 @@ const Responses = () => {
             >
               <CardContent className="p-5">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                  <div className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm shrink-0">
                     {(resp.profile?.full_name || "?").charAt(0).toUpperCase()}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="font-medium text-foreground truncate">
                       {resp.profile?.full_name || "Unknown"}
                     </p>
@@ -154,7 +154,27 @@ const Responses = () => {
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-3">
+                <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+                  {resp.profile?.job_title && (
+                    <div className="flex items-center gap-1.5">
+                      <Briefcase className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{resp.profile.job_title}</span>
+                    </div>
+                  )}
+                  {resp.profile?.department && (
+                    <div className="flex items-center gap-1.5">
+                      <Building2 className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{resp.profile.department}</span>
+                    </div>
+                  )}
+                  {resp.profile?.date_of_joining && (
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">Joined {new Date(resp.profile.date_of_joining).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground/80 mt-3 pt-3 border-t border-border/50">
                   Submitted {new Date(resp.submitted_at).toLocaleDateString()}
                 </p>
               </CardContent>
@@ -168,12 +188,36 @@ const Responses = () => {
         <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
           <DialogHeader className="px-6 pt-6 pb-4 border-b bg-background shrink-0">
             <DialogTitle className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
+              <div className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-sm font-semibold shrink-0">
                 {(selectedResponse?.profile?.full_name || "?").charAt(0).toUpperCase()}
               </div>
-              {selectedResponse?.profile?.full_name || "Response Details"}
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate">{selectedResponse?.profile?.full_name || "Response Details"}</p>
+                <p className="text-xs font-normal text-muted-foreground truncate">{selectedResponse?.profile?.email}</p>
+              </div>
             </DialogTitle>
-            <p className="text-sm text-muted-foreground pl-11">{selectedResponse?.profile?.email}</p>
+            {(selectedResponse?.profile?.job_title || selectedResponse?.profile?.department || selectedResponse?.profile?.date_of_joining) && (
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 pl-[52px] mt-1 text-xs text-muted-foreground">
+                {selectedResponse?.profile?.job_title && (
+                  <span className="flex items-center gap-1.5">
+                    <Briefcase className="h-3.5 w-3.5" />
+                    {selectedResponse.profile.job_title}
+                  </span>
+                )}
+                {selectedResponse?.profile?.department && (
+                  <span className="flex items-center gap-1.5">
+                    <Building2 className="h-3.5 w-3.5" />
+                    {selectedResponse.profile.department}
+                  </span>
+                )}
+                {selectedResponse?.profile?.date_of_joining && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Joined {new Date(selectedResponse.profile.date_of_joining).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+            )}
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto px-6 py-6 bg-muted/30">
